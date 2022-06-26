@@ -39,6 +39,14 @@ class Sudoku
         [row_neighbors, column_neighbors, matrix_neighbors]
       end
 
+      def find_cell_with_id(id)
+        @graph.vertices.select { |node| node.id == id }.first
+      end
+
+      def find_cell_with_coordinates(x, y)
+        @graph.vertices.select { |node| node.coordinates == [x, y] }.first
+      end
+
       def print_sudoku
         puts "Is sudoku valid? #{valid_sudoku?}"
         puts "-" * 26
