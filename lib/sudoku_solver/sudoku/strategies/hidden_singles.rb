@@ -15,11 +15,11 @@ class Sudoku
       # It traverses all nodes with one candidate and changes the current value with the only candidate available
       # It pushes the _id_ of the node on +nodes_changed_ids+ array
       def process
-        puts "Executing #{self.class.name}"
+        # puts "Executing #{self.class.name}"
 
         nodes_with_one_candidate.each do |node|
-          puts "Coordinates: #{node.coordinates} - Candidate: #{node.candidates}"
-          node.value = node.candidates.first
+          # puts "Coordinates: #{node.coordinates} - Candidate: #{node.candidates} - id: #{node.id}"
+          node.fill_with_digit(node.candidates.first)
           node.candidates = []
           @game.nodes_changed_ids << node.id
         end
