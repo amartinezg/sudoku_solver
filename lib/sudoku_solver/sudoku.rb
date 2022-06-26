@@ -9,6 +9,7 @@ class Sudoku
   attr_accessor :graph, :nodes_changed_ids
 
   def initialize(values)
+    @nodes_changed_ids = []
     load_matrix
     @graph = RGL::AdjacencyGraph.new
     add_edges(values)
@@ -16,7 +17,6 @@ class Sudoku
   end
 
   def process
-    @nodes_changed_ids = []
     loop do
       print_sudoku
       Strategies::HiddenSingles.new(self).process
