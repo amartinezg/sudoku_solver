@@ -42,31 +42,31 @@ RSpec.describe Sudoku::Strategies::HiddenSingles do
 
     context "fill right values" do
       it "value of node with id 5 is 4" do
-        expect(@game.find_cell_with_id(5).value).to eq(4)
+        expect(@game.find_node_with_id(5).value).to eq(4)
       end
 
       it "value of node with id 47 is 7" do
-        expect(@game.find_cell_with_id(47).value).to eq(7)
+        expect(@game.find_node_with_id(47).value).to eq(7)
       end
 
       it "value of node with id 74 is 9" do
-        expect(@game.find_cell_with_id(74).value).to eq(9)
+        expect(@game.find_node_with_id(74).value).to eq(9)
       end
 
       it "value of node with id 12 is 7" do
-        expect(@game.find_cell_with_id(12).value).to eq(7)
+        expect(@game.find_node_with_id(12).value).to eq(7)
       end
 
       it "value of node with id 31 is 7" do
-        expect(@game.find_cell_with_id(31).value).to eq(7)
+        expect(@game.find_node_with_id(31).value).to eq(7)
       end
 
       it "value of node with id 68 is 6" do
-        expect(@game.find_cell_with_id(68).value).to eq(6)
+        expect(@game.find_node_with_id(68).value).to eq(6)
       end
 
       it "value of node with id 71 is 8" do
-        expect(@game.find_cell_with_id(71).value).to eq(8)
+        expect(@game.find_node_with_id(71).value).to eq(8)
       end
     end
 

@@ -5,6 +5,9 @@ class Sudoku
   # === Sudoku::Node
   # Class that represent a single cell of the Sudoku game
   class Node
+    include Helpers::Utils
+    include Helpers::Matrix
+
     attr_accessor :id, :candidates, :coordinates
     attr_reader :value
 
@@ -43,6 +46,11 @@ class Sudoku
       candidates_size == 1
     end
 
+    # @return true if cell has only two candidates
+    def only_two_candidates?
+      candidates_size == 2
+    end
+
     # @return [Enumerator] array of candidates grouped in pairs with all possible combinations
     def candidates_tuplets
       @candidates.combination(2)
@@ -51,6 +59,22 @@ class Sudoku
     # @return [Enumerator] array of candidates grouped in triplets with all possible combinations
     def candidates_triplets
       @candidates.combination(3)
+    end
+
+    def neighbors
+      find_neighbors(@id)
+    end
+
+    def row_neighbors
+      find_row_neighbors(@id)
+    end
+
+    def column_neighbors
+      find_column_neighbors(@id)
+    end
+
+    def box_neighbors
+      find_box_neighbors(@id)
     end
   end
 end

@@ -1,46 +1,30 @@
-require 'Matrix'
-
 class Sudoku
   module Helpers
+    include Matrix
+
     module Utils
-      def load_matrix
-        @mm = Matrix[*(0..80).to_a.each_slice(9).to_a]
-        @mini_matrices = []
-        fill_sub_matrices
-      end
 
       def print_by_row
-        (0..8).each { |i| puts @mm.row(i).to_a.join(" - ") }
+        (0..8).each { |i| puts Sudoku::GLOBAL_MATRIX.row(i).to_a.join(" - ") }
       end
 
       def print_by_column
-        (0..8).each { |i| puts @mm.column(i).to_a.join(" - ") }
+        (0..8).each { |i| puts Sudoku::GLOBAL_MATRIX.column(i).to_a.join(" - ") }
       end
 
       def print_by_matrix
-        @mini_matrices.each_with_index do |m, i|
+        Sudoku::MINI_MATRICES.each_with_index do |m, i|
           puts "------------ Printing Matrix # #{i + 1} -------- "
           puts m
         end
       end
 
-      def coordinates(value)
-        @mm.index(value).map { |n| n + 1 }
-      end
-
-      def find_neighbors(value)
-        i, j = @mm.index(value)
-        row_neighbors = @mm.row(i).to_a - [value]
-        column_neighbors = @mm.column(j).to_a - [value]
-
-        index = @mini_matrices.index { |matrix| !!matrix.index(value) }
-        matrix_neighbors = @mini_matrices[index].to_a.flatten - [value]
-
-        [row_neighbors, column_neighbors, matrix_neighbors]
-      end
-
-      def find_cell_with_id(id)
+      def find_node_with_id(id)
         @graph.vertices.select { |node| node.id == id }.first
+      end
+
+      def find_nodes_with_ids(ids)
+        ids.map { |id| find_node_with_id(id) }
       end
 
       def find_cell_with_coordinates(x, y)
@@ -70,27 +54,9 @@ class Sudoku
 
       private
 
-      def extract_mini_matrices(i, j)
-        c = [[], [], []]
-        (i..j).each do |x|
-          row = @mm.row(x).to_a.each_slice(3).to_a
-          c[0] << row[0]
-          c[1] << row[1]
-          c[2] << row[2]
-        end
-        c
-      end
-
-      def fill_sub_matrices
-        extract_mini_matrices(0, 2).each { |c| @mini_matrices << Matrix[*c] }
-        extract_mini_matrices(3, 5).each { |c| @mini_matrices << Matrix[*c] }
-        extract_mini_matrices(6, 8).each { |c| @mini_matrices << Matrix[*c] }
-        true
-      end
-
       def all_rows_valid?
         rows_validated = (0..8).map do |row_index|
-          row = @mm.row(row_index).to_a
+          row = Sudoku::GLOBAL_MATRIX.row(row_index).to_a
           row_nodes = @graph.vertices.find_all { |n| row.include?(n.id) }
           row_nodes_filtered = row_nodes.map(&:value).select(&:positive?)
 
@@ -102,7 +68,7 @@ class Sudoku
 
       def all_columns_valid?
         columns_validated = (0..8).map do |column_index|
-          column = @mm.column(column_index).to_a
+          column = Sudoku::GLOBAL_MATRIX.column(column_index).to_a
           column_nodes = @graph.vertices.find_all { |n| column.include?(n.id) }
           column_nodes_filtered = column_nodes.map(&:value).select(&:positive?)
 
@@ -113,7 +79,7 @@ class Sudoku
       end
 
       def all_matrix_valid?
-        matrices_validated = @mini_matrices.each_with_index.map do |matrix, _i|
+        matrices_validated = Sudoku::MINI_MATRICES.each_with_index.map do |matrix, _i|
           matrix_indexes = matrix.to_a.flatten
           matrix_nodes = @graph.vertices.find_all { |n| matrix_indexes.include?(n.id) }
           matrix_nodes_filtered = matrix_nodes.map(&:value).select(&:positive?)
