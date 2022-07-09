@@ -26,4 +26,5 @@ def reload!(print = true)
 end
 
 require "irb"
+require "pry"
 IRB.start(__FILE__)
