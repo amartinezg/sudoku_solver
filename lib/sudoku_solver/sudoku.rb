@@ -4,13 +4,13 @@ require "rgl/dot"
 
 class Sudoku
   include Helpers::Utils
+  include Helpers::Matrix
   include Strategies
 
   attr_accessor :graph, :nodes_changed_ids
 
   def initialize(values)
     @nodes_changed_ids = []
-    load_matrix
     @graph = RGL::AdjacencyGraph.new
     add_edges(values)
     find_all_candidates
